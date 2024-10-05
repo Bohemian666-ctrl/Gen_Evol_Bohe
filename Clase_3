@@ -1,0 +1,31 @@
+#Clase_3
+Requerimientos
+Tener instalado los programas BWA, Samtools, Ivar e IGV
+
+Paso 01
+Descargar de NCBI o trabajar con secuencias propias
+A)	Descargar de NCBI:
+prefetch --max-size 50G --option-file accessions_mpox.txt ;
+mv */*.sra . ;
+fasterq-dump --split-files *.sra ;
+gzip *fastq ;
+fastqc * ;
+B)	Trabajar con secuencias propias y moverlas a una carpeta, la llamaremos fastq
+Mkdir fastq
+Cd fastq
+C)	Comprobar los permisos que tenemos sobre los archivos
+$ ls -h
+total 969M
+-rw-r--r-- 1 pc08 pc08 230M Sep 23 14:10 SRR29893252_1.fastq.gz
+-rw-r--r-- 1 pc08 pc08 242M Sep 23 14:10 SRR29893252_2.fastq.gz
+-rw-r--r-- 1 pc08 pc08 247M Sep 23 14:10 SRR30716253_1.fastq.gz
+-rw-r--r-- 1 pc08 pc08 252M Sep 23 14:10 SRR30716253_2.fastq.gz
+$ ls -lh
+-rwxrwxrwx 1 pc08 pc08 230M Sep 23 14:10 SRR29893252_1.fastq.gz
+-rwxrwxrwx 1 pc08 pc08 242M Sep 23 14:10 SRR29893252_2.fastq.gz
+-rwxrwxrwx 1 pc08 pc08 247M Sep 23 14:10 SRR30716253_1.fastq.gz
+-rwxrwxrwx 1 pc08 pc08 252M Sep 23 14:10 SRR30716253_2.fastq.gz
+
+Paso 02
+$ fastqc -t 4 *
+$ ls -h
