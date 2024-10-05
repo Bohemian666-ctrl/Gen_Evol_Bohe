@@ -1,0 +1,43 @@
+Clase_05
+#Paso 01: Descargamos nuestras secuencias en extension .fa, ubicados en las carpetas hMPXV y rabies
+Requerimientos: artemis y prokka. Queremos Anotar genomas. Anotacion:  Identificacion de regiones funcionales
+#Paso 02: Damos permisos a nuestras carpetas
+$ chmod 777 *
+#Paso 03: Inspeccionar que contienen nuestros archivos de la carpeta rabies, verificar si son genomas completos y observamos las 10 primeras lienas de cada uno de ellos
+$ grep ">" *.fa
+$ cat *fa
+$ cat *fa | head -n 20
+$ cat OQ603638.fa | head -n 20
+$ cat OQ603651.fa | head -n 20
+#Paso 04: actiamos en ambiente creado para prokka
+$ conda env list
+$ conda activate prokka_env
+#Paso 05:Analisis en prokka
+mkdir annotation/ ;
+for r1 in *fa
+do
+prefix=$(basename $r1 .fa)
+prokka --cpus 16 $r1 -o ${prefix} --prefix $(prefix) --kingdom Viruses ;
+mv ${prefix}/*.gff annotation/${prefix}.gff
+done ;
+#Paso 06: Observamos que se crearon tres carpetas, dos con los nombres de las secuencias y una llamada annotation. Explocaroms cada una de ellas.
+$ cd OQ603638
+$ ls -lh
+#Observamos: cada archivo creado tiene el nombre del fasta original con una extension distinta. Toda esta informacion puede ser cargada en artemis.
+.err 
+.faa $head *faa -n 25 #Encontramos secuencias aminoacidicas de las regiones funcionales. 
+.ffn $head *ffn -n 25 #Encontramos secuencias nucleotidicas de las regiones funcionales. 
+.fna $head *fna -n 25 #Contiene a todo el genoma. 
+.fsa
+.gbk $head *gbk #Anotacion en formato genbank.
+.log
+.sqn
+.tbl $head *tbl # Indica la posicion de cada conting
+.tsv $head *tsv #Muestra cada Conding Sequence identificada, con s longitud y codigo y producto del gen
+.txt $head *txt #Muestra informacion basica, num de contigs, bases y coding sequences.
+#Paso 07: Cargamos toda la informacion a artemis. para ello activamos el ambiente creado dentro de la carpeta donde tenemos el .fa original.
+$ conda deactivate
+$ conda activate art
+$ art
+#Paso 08: File / Open File manager / abrimos nuestro .fa original "OQ603638.fa" y luego para visualizar las anotaciones entramos a File / Read an Entry / y escogemos el archivo .gff que se creo dentro de la carpeta annotation
+# Lo que se muestra es la infromacion .gff con las regiones codificantes sobre el archivo original
